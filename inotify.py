@@ -19,6 +19,7 @@ IN_MOVE	                文件被移动,等同于IN_CLOSE_NOWRITE
 """
 
 __author__ = 'BraveHeart'
+__version__ = 0.1
 
 import os, sys
 import pyinotify
@@ -56,7 +57,6 @@ class MyEventHandler(pyinotify.ProcessEvent):  # 定制化事件处理类，注�
                 except OSError as err: logging.info(f"删除文件失败: {err}"); self.process_IN_DELETE(event)
             else: pass  # dg_run
         else: ...
-        os.renames(self._digraph_path + '/dg.pkl', self._digraph_path + '/dg.pkl.bak')
 
     def process_IN_ACCESS(self, event):
         print('access', event.pathname)

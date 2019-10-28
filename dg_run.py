@@ -20,7 +20,7 @@ w = Words(mysql)
 if __name__ == '__main__':
 
     logging.basicConfig(level="DEBUG")
-    file_name = "dg.pkl"
+    file_name = "./model/dg.pkl"
     if os.path.isfile(file_name):
         begin1 = time.time()
         dg = get_obj(file_name=file_name)

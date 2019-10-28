@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteMappingsManager">
+    <list>
+      <list>
+        <remote-mappings server-id="python@sftp://braveheart@192.168.50.185:24/home/braveheart/Digraph_demo/Digraph_demo/bin/python" />
+      </list>
+    </list>
+  </component>
+</project>
