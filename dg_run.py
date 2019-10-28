@@ -3,6 +3,7 @@ import os
 import time
 
 from digraph import Digraph, get_obj, save_obj, get_participle
+from inotify import main
 from utils import logger
 from mysql_client import MysqlClient
 from word_method import Words
@@ -18,6 +19,10 @@ w = Words(mysql)
 
 
 if __name__ == '__main__':
+    from threading import Thread
+    import time
+    Thread(target=main).start()
+    time.sleep(5)
 
     logging.basicConfig(level="DEBUG")
     file_name = "./model/dg.pkl"
