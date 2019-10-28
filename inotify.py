@@ -26,6 +26,8 @@ import pyinotify
 import logging
 import datetime
 
+from digraph import save_obj
+
 logging.basicConfig(level="DEBUG", filename='/home/braveheart/Digraph_demo/log/monitor.log')
 logging.info("Starting monitor...")
 
@@ -51,11 +53,11 @@ class MyEventHandler(pyinotify.ProcessEvent):  # 定制化事件处理类，注�
         print('modify', event.pathname)
         logging.info("IN_MODIFY event : %s  %s" % (os.path.join(event.path, event.name), datetime.datetime.now()))
         if event.pathname == self._correct_path and os.path.isfile(self._correct_path):
-            if self._digraph_path.endswith('pkl', end=len(self._digraph_path)) and self._dg_flag == 1 and \
+            if self._digraph_path.endswith('pkl', len(self._digraph_path)) and self._dg_flag == 1 and \
                     os.path.exists(self._digraph_path + '.bak'):
                 try: os.remove(self._digraph_path + '.bak')
-                except OSError as err: logging.info(f"删除文件失败: {err}"); self.process_IN_DELETE(event)
-            else: pass  # dg_run
+                except OSError as err: logging.info(f"IN_MODIFY event : 删除文件失败: {err}"); self.process_IN_DELETE(event)
+            else: save_obj(self._digraph_path)  # dg_run
         else: ...
 
     def process_IN_ACCESS(self, event):
@@ -72,7 +74,7 @@ class MyEventHandler(pyinotify.ProcessEvent):  # 定制化事件处理类，注�
         if event.pathname == self._digraph_path + '.bak' and \
                 all([os.path.exists(self._digraph_path), not os.path.exists(self._digraph_path + '.bak')]):
             os.renames(self._digraph_path, self._digraph_path + '.bak')
-        else: logging.info(f"pkl模型文件不存在&bak备份文件")
+        else: logging.info(f"IN_DELETE event : pkl模型文件不存在&bak备份文件")
 
     def process_IN_CREATE(self, event):
         print('CREATE', event.pathname)
@@ -83,7 +85,7 @@ class MyEventHandler(pyinotify.ProcessEvent):  # 定制化事件处理类，注�
 
 def main():
     WATCH_PATH = '/home/braveheart/Digraph_demo/'
-    PICKLE_NAME = 'dg.pkl'
+    PICKLE_NAME = 'model/dg.pkl'
     FILE_NAME = 'correct/correct.txt'
     if not WATCH_PATH:
         print("The WATCH_PATH setting MUST be set.")
@@ -96,7 +98,7 @@ def main():
             sys.exit()
 
     multi_event = pyinotify.IN_OPEN | pyinotify.IN_CLOSE_NOWRITE | pyinotify.IN_MODIFY | \
-                  pyinotify.IN_ACCESS | pyinotify.IN_ATTRIB | pyinotify.IN_DELETE  # 监控多个事件
+                  pyinotify.IN_ACCESS | pyinotify.IN_ATTRIB | pyinotify.IN_DELETE | pyinotify.IN_CREATE  # 监控多个事件
     wm = pyinotify.WatchManager()  # 创建WatchManager对象
 
     handler = MyEventHandler(WATCH_PATH, PICKLE_NAME, FILE_NAME)  # 实例化我们定制化后的事件处理类
@@ -107,4 +109,6 @@ def main():
 
 
 if __name__ == '__main__':
+    # from threading import Thread
+    # Thread(target=main).start()
     main()
