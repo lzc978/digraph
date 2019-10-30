@@ -76,7 +76,7 @@ class MyEventHandler(pyinotify.ProcessEvent):  # 定制化事件处理类，注�
         if event.pathname == self._digraph_path + '.bak' or \
                 all([os.path.exists(self._digraph_path), not os.path.exists(self._digraph_path + '.bak')]):
             try: os.renames(self._digraph_path, self._digraph_path + '.bak'); self._dg_flag = 0
-            except OSError as err: pass
+            except OSError as err: logging.info(f"IN_DELETE event : 文件重命名失败: {err}")
             finally: self.dg_obj(self._digraph_path); self._dg_flag = 1
         else: logging.info(f"IN_DELETE event : pkl模型文件不存在&bak备份文件")
 
