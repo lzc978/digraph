@@ -34,11 +34,12 @@ logging.info("Starting monitor...")
 
 class MyEventHandler(pyinotify.ProcessEvent):  # 定制化事件处理类，注意继承
 
-    _dg_flag = 0  # type: int
+    _dg_flag = int(os.path.exists('/home/braveheart/Digraph_demo/model/dg.pkl'))  # type: int
 
-    def __init__(self, path, pickle_name, file_name):
+    def __init__(self, path, pickle_name, file_name, dg_obj):
         self._correct_path = path + file_name
         self._digraph_path = path + pickle_name
+        self.dg_obj = dg_obj
         super(MyEventHandler, self).__init__()
 
     def process_IN_OPEN(self, event):  # 必须为process_事件名称，event表示事件对象
@@ -58,7 +59,7 @@ class MyEventHandler(pyinotify.ProcessEvent):  # 定制化事件处理类，注�
                 if not os.path.exists(self._digraph_path + '.bak'): return self.process_IN_DELETE(event)
                 try: os.remove(self._digraph_path + '.bak')
                 except OSError as err: logging.info(f"IN_MODIFY event : 删除文件失败: {err}"); self.process_IN_DELETE(event)
-            else: save_obj(self._digraph_path)  # dg_run
+            else: self.dg_obj(self._digraph_path)  # dg_run
         else: ...
 
     def process_IN_ACCESS(self, event):
@@ -76,7 +77,7 @@ class MyEventHandler(pyinotify.ProcessEvent):  # 定制化事件处理类，注�
                 all([os.path.exists(self._digraph_path), not os.path.exists(self._digraph_path + '.bak')]):
             try: os.renames(self._digraph_path, self._digraph_path + '.bak'); self._dg_flag = 0
             except OSError as err: pass
-            finally: save_obj(self._digraph_path); self._dg_flag = 1
+            finally: self.dg_obj(self._digraph_path); self._dg_flag = 1
         else: logging.info(f"IN_DELETE event : pkl模型文件不存在&bak备份文件")
 
     def process_IN_CREATE(self, event):
@@ -86,7 +87,7 @@ class MyEventHandler(pyinotify.ProcessEvent):  # 定制化事件处理类，注�
         else: ...
 
 
-def main():
+def main(dg_obj):
     WATCH_PATH = '/home/braveheart/Digraph_demo/'
     PICKLE_NAME = 'model/dg.pkl'
     FILE_NAME = 'correct/correct.txt'
@@ -104,7 +105,7 @@ def main():
     dg_multi_event = pyinotify.IN_DELETE | pyinotify.IN_CREATE | pyinotify.IN_ACCESS
     wm = pyinotify.WatchManager()  # 创建WatchManager对象
 
-    handler = MyEventHandler(WATCH_PATH, PICKLE_NAME, FILE_NAME)  # 实例化我们定制化后的事件处理类
+    handler = MyEventHandler(WATCH_PATH, PICKLE_NAME, FILE_NAME, dg_obj)  # 实例化我们定制化后的事件处理类
     notifier = pyinotify.Notifier(wm, handler)  # 在notifier实例化时传入,notifier会自动执行
 
     wm.add_watch('/home/braveheart/Digraph_demo/correct', multi_event, rec=True)  # 添加监控的目录，及事件

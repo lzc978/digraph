@@ -3,6 +3,7 @@ ChatterBot utility functions
 """
 import sys
 import traceback
+import functools
 from threading import Lock as ThreadLock
 from os.path import dirname, abspath, join
 
@@ -73,6 +74,7 @@ def single_instance(cls):
     __instance = dict()
     __instance_lock = ThreadLock()
 
+    @functools.wraps(cls)
     def _single_instance(*args, **kwargs):
         if cls not in __instance:
             with __instance_lock:
