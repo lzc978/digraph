@@ -5,5 +5,5 @@ Modify errors according to directed acyclic graph
   - In construction...
     - [ ] dockercompose
     - [ ] dockerfile
-    - [ ] shell
+    - [x] shell
     - [x] ini
