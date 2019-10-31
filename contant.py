@@ -19,7 +19,7 @@ broadcast_key = "broadcast:{}"
 staff_key = "way_staff_{}:{}"
 # subsystem_id, staff_id, 值为set(接管device_id1,device_id2...)：员工信息+接管的机器id
 
-log_key = "log:{}"
+log_key = "logs:{}"
 # session_id, 值为list:问答日志缓存
 
 # user_key = "user:{}"

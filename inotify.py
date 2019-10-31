@@ -28,7 +28,7 @@ import datetime
 
 from digraph import save_obj
 
-logging.basicConfig(level="DEBUG", filename='/home/braveheart/Digraph_demo/log/monitor.log')
+logging.basicConfig(level="DEBUG", filename='/home/braveheart/Digraph_demo/logs/monitor.logs')
 logging.info("Starting monitor...")
 
 
