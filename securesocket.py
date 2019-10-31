@@ -19,9 +19,8 @@ class Handler(object):
         self.requests.sendall(pickle.dumps(data))
 
     def _receive(self):
-        try: data = self.requests.recv(1024)
+        try: data = self.requests.recv(1024); return pickle.loads(data)
         except EOFError as err: logger.error(f"客户端断开链接：{err}"); return False
-        return pickle.loads(data)
 
     def __call__(self, dg):
         content = \
