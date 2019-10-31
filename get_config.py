@@ -18,6 +18,7 @@ class ReadConfigFile(object):
             self._inotify()
             self._tcpsocket()
             self._mysql()
+            return self.cfg
         except configparser.Error as e:
             self.cfg_parser = None
             logger.error('errcode:10004, 读取配置文件失败，error:{err}'.format(err=e))
@@ -29,7 +30,7 @@ class ReadConfigFile(object):
         cfg_digraph['_data_path'] = self.cfg_parser.get(section_name, '_data_path')
         cfg_digraph['_sentence_path'] = self.cfg_parser.get(section_name, '_sentence_path')
 
-        self.cfg['digraph'] = cfg_digraph
+        self.cfg['digraph'] = cfg_digraph; return
 
     def _inotify(self):
         cfg_inotify = {}
@@ -38,23 +39,23 @@ class ReadConfigFile(object):
         cfg_inotify['PICKLE_NAME'] = self.cfg_parser.get(section_name, 'PICKLE_NAME')
         cfg_inotify['FILE_NAME'] = self.cfg_parser.get(section_name, 'FILE_NAME')
 
-        self.cfg['inotify'] = cfg_inotify
+        self.cfg['inotify'] = cfg_inotify; return
 
     def _tcpsocket(self):
         cfg_tcpsocket = {}
         section_name = 'TCPSocket'
         cfg_tcpsocket['host'] = self.cfg_parser.get(section_name, 'host')
-        cfg_tcpsocket['port'] = self.cfg_parser.get(section_name, 'port')
+        cfg_tcpsocket['port'] = int(self.cfg_parser.get(section_name, 'port'))
 
-        self.cfg['tcpsocket'] = cfg_tcpsocket
+        self.cfg['tcpsocket'] = cfg_tcpsocket; return
 
     def _mysql(self):
         cfg_mysql = {}
         section_name = 'Mysql'
         cfg_mysql['host'] = self.cfg_parser.get(section_name, 'host')
-        cfg_mysql['port'] = self.cfg_parser.get(section_name, 'port')
+        cfg_mysql['port'] = int(self.cfg_parser.get(section_name, 'port'))
         cfg_mysql['user'] = self.cfg_parser.get(section_name, 'user')
         cfg_mysql['password'] = self.cfg_parser.get(section_name, 'password')
         cfg_mysql['database'] = self.cfg_parser.get(section_name, 'database')
 
-        self.cfg['mysql'] = cfg_mysql
+        self.cfg['mysql'] = cfg_mysql; return
