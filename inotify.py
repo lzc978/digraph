@@ -87,10 +87,10 @@ class MyEventHandler(pyinotify.ProcessEvent):  # 定制化事件处理类，注�
         else: ...
 
 
-def main(dg_obj):
-    WATCH_PATH = '/home/braveheart/Digraph_demo/'
-    PICKLE_NAME = 'model/dg.pkl'
-    FILE_NAME = 'correct/correct.txt'
+def main(dg_obj, cfg):
+    WATCH_PATH = cfg['inotify']['WATCH_PATH']
+    PICKLE_NAME = cfg['inotify']['PICKLE_NAME']
+    FILE_NAME = cfg['inotify']['FILE_NAME']
     if not WATCH_PATH:
         print("The WATCH_PATH setting MUST be set.")
         sys.exit()
@@ -108,12 +108,11 @@ def main(dg_obj):
     handler = MyEventHandler(WATCH_PATH, PICKLE_NAME, FILE_NAME, dg_obj)  # 实例化我们定制化后的事件处理类
     notifier = pyinotify.Notifier(wm, handler)  # 在notifier实例化时传入,notifier会自动执行
 
-    wm.add_watch('/home/braveheart/Digraph_demo/correct', multi_event, rec=True)  # 添加监控的目录，及事件
-    wm.add_watch('/home/braveheart/Digraph_demo/model', dg_multi_event, rec=True)  # 添加监控的目录，及事件
+    wm.add_watch(WATCH_PATH + '/correct', multi_event, rec=True)  # 添加监控的目录，及事件
+    wm.add_watch(WATCH_PATH + '/model', dg_multi_event, rec=True)  # 添加监控的目录，及事件
     notifier.loop()
 
 
 if __name__ == '__main__':
-    # from threading import Thread
-    # Thread(target=main).start()
-    main()
+    # main()
+    pass

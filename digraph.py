@@ -499,6 +499,16 @@ def get_dg2(mysql, sub_system_id=None):
     return dg
 
 
+def printf(dg, data):
+    logger.debug("*" * 10 + "测试" + "*" * 10)
+    begin3 = time.time()
+    # 我 要 取号
+    corr_res = dg.search(get_participle(data))
+    logger.debug(corr_res)
+    logger.debug("查询耗时{}秒\n".format(time.time() - begin3))
+    return corr_res
+
+
 if __name__ == "__main__":
     """前向查询后向查询"""
     import logging
