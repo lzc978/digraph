@@ -14,3 +14,4 @@ snownlp==0.12.3
 synonyms==3.10.2
 urllib3==1.24.2
 xpinyin==0.5.6
+docker-compose

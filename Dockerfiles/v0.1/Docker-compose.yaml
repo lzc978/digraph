@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  db:
+    image: mysql
+
+  webapp:
+    build:
+      context: .  # 指定Dockerfile构建
+      dockerfile: Dockerfile
+
+    image: examples/web # 指定镜像构建
+    ports:
+      - "80:80"
+    volumes:
+      - "/data"
+    dns:
+      - 8.8.8.8
+      - 114.114.114.114
+    command: /bin/bash ../../dg_test.sh

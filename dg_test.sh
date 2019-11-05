@@ -53,7 +53,7 @@ function echo_fun(){
 }
 
 function init_dir() {
-    mkdir -p $HOME/digraph/log
+    mkdir -p $HOME/digraph/logs
     echo "创建日志路径完成"
     mkdir -p $HOME/digraph/model
     echo "创建数据模型路径完成"
