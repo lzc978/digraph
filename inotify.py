@@ -108,7 +108,7 @@ def main(dg_obj, cfg):
     handler = MyEventHandler(WATCH_PATH, PICKLE_NAME, FILE_NAME, dg_obj)  # 实例化我们定制化后的事件处理类
     notifier = pyinotify.Notifier(wm, handler)  # 在notifier实例化时传入,notifier会自动执行
 
-    wm.add_watch(WATCH_PATH + '/correct', multi_event, rec=True)  # 添加监控的目录，及事件
+    wm.add_watch(WATCH_PATH + '/model/correct', multi_event, rec=True)  # 添加监控的目录，及事件
     wm.add_watch(WATCH_PATH + '/model', dg_multi_event, rec=True)  # 添加监控的目录，及事件
     notifier.loop()
 
