@@ -3,7 +3,7 @@ baidu-aip==2.2.13.0
 certifi==2019.3.9
 chardet==3.0.4
 idna==2.8
-joblib==0.14.0
+joblib==1.2.0
 numpy==1.17.3
 PyMySQL==0.9.3
 requests==2.21.0
